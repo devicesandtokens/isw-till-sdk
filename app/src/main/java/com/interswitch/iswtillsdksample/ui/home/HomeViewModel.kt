@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
     }
 
     fun sendTestRequest(amount: Int = 1000) {
-        val command = TillCommand.TransactionRequestCommand(TransactionRequest(amount= "1000", TillPaymentOptions.TRANSFER, accountType = "savings", command = "purchase"))
+        val command = TillCommand.TransactionRequestCommand(TransactionRequest(amount= "1000", TillPaymentOptions.CARD, accountType = "savings", command = "purchase"))
         appRepository.sendMessage(command)
     }
 
