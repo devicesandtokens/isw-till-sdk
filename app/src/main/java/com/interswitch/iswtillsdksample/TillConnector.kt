@@ -4,12 +4,12 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.isw_smart_till.IswTillManagerSDK
-import com.example.isw_smart_till.enums.TillConnectionModes
-import com.example.isw_smart_till.enums.TillReturnCodes
-import com.example.isw_smart_till.interfaces.TillCallBackListener
-import com.example.isw_smart_till.interfaces.TillCommand
-import com.example.isw_smart_till.models.requests.HeartBeatRequest
+import com.interswitch.smart_till.IswTillManagerSDK
+import com.interswitch.smart_till.enums.TillConnectionModes
+import com.interswitch.smart_till.enums.TillReturnCodes
+import com.interswitch.smart_till.interfaces.TillCallBackListener
+import com.interswitch.smart_till.interfaces.TillCommand
+import com.interswitch.smart_till.models.requests.HeartBeatRequest
 import com.interswitch.iswtillsdksample.data.repository.TillCalls
 
 object TillConnector {

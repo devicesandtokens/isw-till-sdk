@@ -21,7 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.ui.events.SnackBarEvent
+import com.interswitch.iswtillsdksample.ui.events.SnackBarEvent
 import com.interswitch.iswtillsdksample.ui.home.HomeViewModel
 import com.interswitch.iswtillsdksample.ui.theme.ISWTillSDKSampleTheme
 import kotlinx.coroutines.CoroutineScope

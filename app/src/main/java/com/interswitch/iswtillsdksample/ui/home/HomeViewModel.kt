@@ -2,18 +2,20 @@ package com.interswitch.iswtillsdksample.ui.home
 
 
 import android.bluetooth.BluetoothDevice
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.example.isw_smart_till.enums.TillConnectionModes
-import com.example.isw_smart_till.enums.TillPaymentOptions
-import com.example.isw_smart_till.enums.TillStatus
-import com.example.isw_smart_till.interfaces.TillCommand
-import com.example.isw_smart_till.models.requests.TransactionRequest
-import com.example.myapplication.data.MockData
+import com.interswitch.smart_till.enums.TillConnectionModes
+import com.interswitch.smart_till.enums.TillPaymentOptions
+import com.interswitch.smart_till.enums.TillStatus
+import com.interswitch.smart_till.interfaces.TillCommand
+import com.interswitch.smart_till.models.requests.TransactionRequest
+import com.interswitch.iswtillsdksample.data.MockData
 import com.interswitch.iswtillsdksample.data.repository.IAppRepository
 import com.interswitch.iswtillsdksample.data.repository.TillCalls
-import com.example.myapplication.ui.events.SnackBarEvent
+import com.interswitch.iswtillsdksample.ui.events.SnackBarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,9 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
 
     private val _uiState = MutableStateFlow<HomeUIState>(HomeUIState(receivedMessage = MockData.receivedMessage))
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
+
+    /** The mode chosen in Settings. */
+    val currentMode: StateFlow<TillConnectionModes> = appRepository.currentMode
 
     private val _snackBarEvents = MutableStateFlow<SnackBarEvent?>(null)
     val snackBarEvents: StateFlow<SnackBarEvent?> = _snackBarEvents
@@ -50,7 +55,7 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
     fun clearSnackbarEvent() {
         _snackBarEvents.value = null
     }
-    fun initializeTill(mode: TillConnectionModes) = appRepository.initializeTill()
+    fun initializeTill(mode: TillConnectionModes) = appRepository.initializeTill(mode)
 
     fun connect(ip: String) {
         appRepository.connect(ip)
@@ -61,7 +66,7 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
     }
 
     fun sendTestRequest(amount: Int = 1000) {
-        val command = TillCommand.TransactionRequestCommand(TransactionRequest(amount= "1000", TillPaymentOptions.CARD, accountType = "savings", command = "purchase"))
+        val command = TillCommand.TransactionRequestCommand(TransactionRequest(amount= "1000", TillPaymentOptions.TRANSFER, accountType = "savings", command = "purchase"))
         appRepository.sendMessage(command)
     }
 
@@ -72,6 +77,14 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
 
     fun disconnect() {
         appRepository.disconnect()
+    }
+
+    fun requestConnectionState() {
+        appRepository.requestConnectionState()
+    }
+
+    fun clearLogs() {
+        _uiState.value = _uiState.value.copy(receivedMessage = "")
     }
 
     private fun updateUIState(newDataState: TillCalls) {
@@ -87,6 +100,10 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
                 showSnackBar("Device connected to ${dataState.device}")
                 _uiState.value.copy(isConnected = true, connectedDevice = dataState.device)
             }
+            is TillCalls.ErrorReceived -> {
+                showSnackBar("Error connecting to device ${dataState.errorMessage}")
+                _uiState.value.copy(receivedMessage = "${_uiState.value.receivedMessage } \n ${dataState.errorMessage}")
+            }
             is TillCalls.MessageReceived -> {
                 println("Device got a message ${dataState.message}")
                 _uiState.value.copy(receivedMessage = "${_uiState.value.receivedMessage } \n ${dataState.message}")
@@ -99,7 +116,8 @@ class HomeViewModel @Inject constructor(private val appRepository: IAppRepositor
                 println("Device got a command")
                 _uiState.value.copy(receivedMessage = "${_uiState.value.receivedMessage } \n ${dataState.command}")
             }
-            else -> {
+            is TillCalls.HeartBeatReceived -> {
+                // Heartbeat received - connection is alive, no UI update needed
                 _uiState.value.copy()
             }
         }

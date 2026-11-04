@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.ui.home.HomeScreen
+import com.interswitch.iswtillsdksample.ui.home.HomeScreen
 import com.interswitch.iswtillsdksample.ui.settings.SettingsScreen
 
 @Composable

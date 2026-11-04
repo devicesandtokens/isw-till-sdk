@@ -41,7 +41,7 @@
         </activity>
 
         <service
-            android:name="com.example.isw_smart_till.service.tcp.TCPService"
+            android:name="com.interswitch.smart_till.service.tcp.TCPService"
             android:exported="false"
             tools:replace="android:exported"
             android:foregroundServiceType="dataSync|connectedDevice" />

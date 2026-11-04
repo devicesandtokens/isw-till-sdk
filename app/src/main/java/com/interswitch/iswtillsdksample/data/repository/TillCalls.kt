@@ -1,6 +1,6 @@
 package com.interswitch.iswtillsdksample.data.repository
 
-import com.example.isw_smart_till.interfaces.TillCommand
+import com.interswitch.smart_till.interfaces.TillCommand
 
 sealed interface TillCalls{
 
@@ -13,5 +13,8 @@ sealed interface TillCalls{
     data class CommandReceived(val command: TillCommand): TillCalls
 
     object Disconnect: TillCalls
+
+    /** Heartbeat received - typically handled silently to maintain connection */
+    object HeartBeatReceived: TillCalls
 
 }

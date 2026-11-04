@@ -1,7 +1,7 @@
 package com.interswitch.iswtillsdksample.di
 
 import android.content.Context
-import com.example.isw_smart_till.IswTillManagerSDK
+import com.interswitch.smart_till.IswTillManagerSDK
 import com.interswitch.iswtillsdksample.data.repository.AppRepositoryImpl
 import com.interswitch.iswtillsdksample.data.repository.IAppRepository
 import dagger.Module
@@ -23,7 +23,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(): IAppRepository {
-        return AppRepositoryImpl()
+    fun provideRepository(
+        tillManagerSDK: IswTillManagerSDK,
+        @ApplicationContext context: Context
+    ): IAppRepository {
+        return AppRepositoryImpl(tillManagerSDK, context)
     }
 }

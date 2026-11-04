@@ -1,6 +1,6 @@
 package com.interswitch.iswtillsdksample.ui.home
 
-import com.example.isw_smart_till.enums.TillConnectionModes
+import com.interswitch.smart_till.enums.TillConnectionModes
 
 data class HomeUIState(
     val receivedMessage: String = "",
@@ -8,6 +8,3 @@ data class HomeUIState(
     val connectedDevice: String = "",
     val connectionType: TillConnectionModes = TillConnectionModes.USB
 )
-
-
-
